@@ -2,9 +2,9 @@
 #include <map>
 #include <vector>
 #include <stack>
+#include <string>
+#include <algorithm>
 
-
-std::map<char, char> coordinates{{'n', 's'}, {'s', 'n'}, {'e', 'w'}, {'w', 'e'}};
 
 /**
  * 
@@ -22,6 +22,7 @@ At the end of the iteration, we return true if the stack is empty and distance c
 */
 bool isValidWalk(std::vector<char> walk) {
     // Our "stack" to keep track of encountered coordinates
+    std::map<char, char> coordinates{{'n', 's'}, {'s', 'n'}, {'e', 'w'}, {'w', 'e'}};
     std::stack<char> coordinateStack;
 
     // Distance count
@@ -30,7 +31,7 @@ bool isValidWalk(std::vector<char> walk) {
     // Return false right away if the walk doesn't have exactly 10 coordinates
     if(walk.size() != 10) return false;
 
-    for(int index = 0; index < walk.size(); index++) {
+    for(auto index = 0; index < walk.size(); index++) {
 
         // If the coordinate stack is empty, push the new coordinate onto it and increment the distance
         if(coordinateStack.empty()) {
@@ -56,9 +57,20 @@ bool isValidWalk(std::vector<char> walk) {
     return coordinateStack.empty() && distance == 0;
 }
 
+/**
+ * 
+A much simpler version
+ * @param vector containing walk coordinates
+ 
+ * @returns a boolean value showing whether the walk is valid or not
+*/
+bool isValidWalk2(std::vector<char> walk) {
+   return walk.size() == 10 && std::count(walk.begin(), walk.end(), 'n') == std::count(walk.begin(), walk.end(), 's') && std::count(walk.begin(), walk.end(), 'e') == std::count(walk.begin(), walk.end(), 'w');
+}
+
 int main() {
 
-    std::cout << std::boolalpha << isValidWalk({'e','e','e','w','n','s','n','s','e','w'});
+    std::cout << std::boolalpha << isValidWalk2({'e','w','e','w','n','s','n','s','e','w'});
     
     return 0;
 }
