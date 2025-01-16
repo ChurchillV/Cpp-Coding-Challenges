@@ -34,7 +34,6 @@ std::size_t duplicateCount(const std::string& in)
 
 int main() {
     std::string test_string = "a";
-    char test_char = '1';
-    std::cout << tolower(test_char) << "\n";
+    std::cout << duplicateCount(test_string) << "\n";
     return 0;
 }
