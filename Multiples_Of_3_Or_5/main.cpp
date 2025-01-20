@@ -38,6 +38,6 @@ int solution(int number)
 }
 
 int main() {
-    std::cout << solution(10) << "\n";
+    std::cout << solution(102) << "\n";
     return 0;
 }
