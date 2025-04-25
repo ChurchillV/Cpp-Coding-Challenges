@@ -7,13 +7,16 @@ bool validate_battlefield(std::vector< std:: vector<int> > field) {
     std::vector< std::vector<bool> > visited(N, std::vector<bool>(N, false));
     int ship_count[5] = {0};
 
+    // Direction coordinates
     int dx[] = {-1, -1, -1, 0, 0, 1, 1, 1};
     int dy[] = {-1, 0, 1, -1, 1, -1, 0, 1};
 
+    // Ensures that the cell is within the field
     auto is_valid = [&](int x, int y) {
         return x >= 0 && x < N && y >= 0 && y < N;
     };
 
+    // Checks if there are any adjacent cells
     auto has_adjacent = [&](int x, int y) {
         for(int d = 0; d < 8; d++) {
             int nx = x + dx[d];
@@ -32,12 +35,14 @@ bool validate_battlefield(std::vector< std:: vector<int> > field) {
 
                 int r = row, c = col;
 
+                // Horizontal inspection of 1s
                 while(is_valid(r, c + 1) && field[r][c + 1] == 1) {
                     c++;
                     length++;
                     visited[r][c] = true;
                 } 
-
+                
+                // Vertical inspection of 1s if no other ones were found initially
                 if(length == 1) {
                     r = row;
                     c = col;
@@ -47,7 +52,8 @@ bool validate_battlefield(std::vector< std:: vector<int> > field) {
                         visited[r][c] = true;
                     }
                 }
-
+                
+                // Finally check for overlapping 1s in adjacent cells (diagonal)
                 for(int i = row; i <= r; i++) {
                     for(int j = col; j <= c; j++) {
                         if(has_adjacent(i, j)) return false;
