@@ -3,11 +3,6 @@
 #include <stack>
 #include <string>
 
-#include <iostream>
-#include <string>
-#include <stack>
-#include <map>
-
 std::string to_postfix(const std::string& infix) {
     std::map<char, int> precedence = {
         {'^', 3}, {'*', 2}, {'/', 2}, {'+', 1}, {'-', 1}
