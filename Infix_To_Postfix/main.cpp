@@ -3,57 +3,52 @@
 #include <stack>
 #include <string>
 
-std::string to_postfix(std::string infix) {
-    std::map<char, int> operator_precedence_mapping = {{'^', 2}, {'*', 3}, {'/', 3}, {'+', 4}, {'-', 4}};
-    std::stack<char> operator_stack;
-    std::string postfix = "";
-    infix += ')';
-    
-    operator_stack.push('(');
+#include <iostream>
+#include <string>
+#include <stack>
+#include <map>
 
-    auto print_top_of_stack = [&]() {
-        std::cout << "Top of Stack " << operator_stack.top() << "\n";
+std::string to_postfix(const std::string& infix) {
+    std::map<char, int> precedence = {
+        {'^', 3}, {'*', 2}, {'/', 2}, {'+', 1}, {'-', 1}
     };
 
-    for(int i = 0; i < infix.length(); i++) {
-        if(operator_precedence_mapping[infix[i]]) {
-            std::cout << "Current operator: " << infix[i] << "\n";
-            if(operator_precedence_mapping[operator_stack.top()] <= operator_precedence_mapping[infix[i]]) {
-                if(operator_stack.top() != '(') {
-                    while(operator_precedence_mapping[operator_stack.top()] <= operator_precedence_mapping[infix[i]] && operator_stack.top() != '(') {
-                        postfix += operator_stack.top();
-                        operator_stack.pop();
-                    }
-                }
-                operator_stack.push(infix[i]);
-                print_top_of_stack();
-                std::cout << "Postfix: " << postfix << "\n";
-            } else {
-                operator_stack.push(infix[i]);
-                print_top_of_stack();
+    std::stack<char> ops;
+    std::string postfix;
+
+    for (char token : infix) {
+        if (std::isalnum(token)) {
+            postfix += token;
+        } 
+        else if (token == '(') {
+            ops.push(token);
+        } 
+        else if (token == ')') {
+            while (!ops.empty() && ops.top() != '(') {
+                postfix += ops.top();
+                ops.pop();
             }
-        } else if(infix[i] == '(') {
-            operator_stack.push(infix[i]);
-            print_top_of_stack();
-        } else if(infix[i] == ')') {
-            while(!operator_stack.empty()) {
-                if(operator_stack.top() == '(') {
-                    operator_stack.pop();
-                    break;
-                }
-                else {
-                    postfix += operator_stack.top();
-                    operator_stack.pop();
-                    std::cout << "Postfix: " << postfix << "\n";
-                }
-            } 
-        } else {
-            postfix += infix[i];
-            std::cout << "Postfix: " << postfix << "\n";
+            if (!ops.empty()) ops.pop(); // remove the '('
+        } 
+        else if (precedence.count(token)) {
+            while (!ops.empty() && ops.top() != '(' &&
+                   precedence[ops.top()] >= precedence[token]) {
+                postfix += ops.top();
+                ops.pop();
+            }
+            ops.push(token);
         }
     }
+
+    // Pop any remaining operators
+    while (!ops.empty()) {
+        postfix += ops.top();
+        ops.pop();
+    }
+
     return postfix;
 }
+
 
 int main() {
     std::string infix = "(5-4-1)+9/5/2-7/1/7";
