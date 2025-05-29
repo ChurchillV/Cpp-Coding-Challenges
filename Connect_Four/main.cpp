@@ -30,6 +30,8 @@ bool isWinner(const std::vector<std::vector<std::string>>& grid, int row, int co
     return checkDirection(grid, row, col, 1, 0, color) ||    // horizontal →
            checkDirection(grid, row, col, 0, 1, color) ||    // vertical ↓
            checkDirection(grid, row, col, 1, 1, color) ||    // diagonal ↘
+           checkDirection(grid, row, col, -1, 1, color) ||    // diagonal <-
+           checkDirection(grid, row, col, -1, -1, color) ||    // diagonal <-
            checkDirection(grid, row, col, 1, -1, color);     // diagonal ↗
 }
 
@@ -63,7 +65,7 @@ std::string who_is_winner(std::vector<std::string> pieces_position_list)
 
 int main() {
     std::vector<std::string> test = {
-        "A_Yellow",
+       "A_Yellow",
         "B_Red",
         "B_Yellow",
         "C_Red",
