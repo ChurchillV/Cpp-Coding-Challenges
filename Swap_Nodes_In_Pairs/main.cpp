@@ -52,8 +52,5 @@ int main() {
 
     std::cout << "Swapped List: ";
     printList(swappedHead);
-
-    delete solution;
-
     return 0;
 }
